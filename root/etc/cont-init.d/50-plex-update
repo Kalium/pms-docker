@@ -1,5 +1,5 @@
 #!/usr/bin/with-contenv bash
-
+exit 0
 # If we are debugging, enable trace
 if [ "${DEBUG,,}" = "true" ]; then
   set -x
