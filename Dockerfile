@@ -1,6 +1,6 @@
 FROM ubuntu:16.04
 
-ARG S6_OVERLAY_VERSION=v1.17.2.0
+ARG S6_OVERLAY_VERSION=v1.22.1.0
 ARG DEBIAN_FRONTEND="noninteractive"
 ENV TERM="xterm" LANG="C.UTF-8" LC_ALL="C.UTF-8"
 
@@ -14,26 +14,25 @@ RUN \
       curl \
       xmlstarlet \
       uuid-runtime \
-      unrar \
-    && \
+      unrar
+
 
 # Fetch and extract S6 overlay
-    curl -J -L -o /tmp/s6-overlay-aarch64.tar.gz https://github.com/just-containers/s6-overlay/releases/download/${S6_OVERLAY_VERSION}/s6-overlay-aarch64.tar.gz && \
-    tar xzf /tmp/s6-overlay-aarch64.tar.gz -C / && \
+RUN curl -J -L -o /tmp/s6-overlay-aarch64.tar.gz https://github.com/just-containers/s6-overlay/releases/download/${S6_OVERLAY_VERSION}/s6-overlay-aarch64.tar.gz && \
+    tar xzf /tmp/s6-overlay-aarch64.tar.gz -C /
 
 # Add user
-    useradd -U -d /config -s /bin/false plex && \
+RUN useradd -U -d /config -s /bin/false plex && \
     usermod -G users plex && \
 
 # Setup directories
     mkdir -p \
       /config \
       /transcode \
-      /data \
-    && \
+      /data
 
 # Cleanup
-    apt-get -y autoremove && \
+RUN apt-get -y autoremove && \
     apt-get -y clean && \
     rm -rf /var/lib/apt/lists/* && \
     rm -rf /tmp/* && \
